@@ -3,7 +3,16 @@ import uuid
 from datetime import datetime
 
 st.title("🛒 Buyer Dashboard")
-
+# -------- AUTO DEMO BUYER (for smooth demo) --------
+if "current_buyer" not in st.session_state:
+    demo_id = "DEMO_BUYER"
+    st.session_state.buyers[demo_id] = {
+        "name": "Demo Buyer",
+        "type": "Retailer",
+        "region": "Pune",
+        "product": "Broiler Chicken"
+    }
+    st.session_state.current_buyer = demo_id
 # -------- Ensure buyer exists --------
 if "current_buyer" not in st.session_state:
     st.warning("Please create Buyer Profile first (Phase 1)")
