@@ -112,3 +112,27 @@ for oid, o in st.session_state.orders.items():
             st.success("Order repeated")
 
         st.markdown("</div>", unsafe_allow_html=True)
+# -------- RATE FARMER (POST DELIVERY) --------
+st.divider()
+st.subheader("⭐ Rate Your Farmer")
+
+for oid, o in st.session_state.orders.items():
+    if o["buyer_id"] == buyer_id and o["status"] == "Delivered" and "rating" not in o:
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.write(f"Order ID: {oid}")
+        rating = st.slider(
+            "Rating (1 = Poor, 5 = Excellent)",
+            1, 5, 5,
+            key=f"rate_{oid}"
+        )
+        review = st.text_input(
+            "Optional Review",
+            key=f"rev_{oid}"
+        )
+
+        if st.button("Submit Rating", key=f"submit_{oid}"):
+            st.session_state.orders[oid]["rating"] = rating
+            st.session_state.orders[oid]["review"] = review
+            st.success("Thank you for your feedback!")
+
+        st.markdown("</div>", unsafe_allow_html=True)
