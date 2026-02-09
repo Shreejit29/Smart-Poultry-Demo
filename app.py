@@ -16,35 +16,38 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- SESSION STATE ----------
+# ---------- SESSION STATE INITIALIZATION ----------
 if "role" not in st.session_state:
     st.session_state.role = None
 
-if "orders" not in st.session_state:
-    st.session_state.orders = []
+if "commission_rate" not in st.session_state:
+    st.session_state.commission_rate = 0.05  # 5%
 
-# ---------- LOGIN SCREEN ----------
+if "buyers" not in st.session_state:
+    st.session_state.buyers = {}
+
+if "farmers" not in st.session_state:
+    st.session_state.farmers = {}
+
+if "orders" not in st.session_state:
+    st.session_state.orders = {}
+
+# ---------- LOGIN ----------
 st.title("🐔 Smart Poultry Link")
-st.caption("Investor Demo – Workflow & Governance Showcase")
+st.caption("Phase 1 – Foundation Demo")
 
 if st.session_state.role is None:
     st.subheader("Login as")
-
     c1, c2, c3 = st.columns(3)
 
-    with c1:
-        if st.button("🛒 Buyer"):
-            st.session_state.role = "buyer"
-            st.switch_page("pages/buyer.py")
+    if c1.button("🛒 Buyer"):
+        st.session_state.role = "buyer"
+        st.switch_page("pages/buyer.py")
 
-    with c2:
-        if st.button("🚜 Farmer"):
-            st.session_state.role = "farmer"
-            st.switch_page("pages/farmer.py")
+    if c2.button("🚜 Farmer"):
+        st.session_state.role = "farmer"
+        st.switch_page("pages/farmer.py")
 
-    with c3:
-        if st.button("🛡️ Admin"):
-            st.session_state.role = "admin"
-            st.switch_page("pages/admin.py")
-else:
-    st.success(f"Logged in as: {st.session_state.role.upper()}")
+    if c3.button("🛡️ Admin"):
+        st.session_state.role = "admin"
+        st.switch_page("pages/admin.py")
