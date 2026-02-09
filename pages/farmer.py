@@ -2,7 +2,17 @@ import streamlit as st
 from datetime import datetime
 
 st.title("🚜 Farmer Dashboard")
+# ---------- FARMER RATING ----------
+ratings = [
+    o["rating"] for o in st.session_state.orders.values()
+    if o.get("farmer_id") == farmer_id and "rating" in o
+]
 
+if ratings:
+    avg_rating = round(sum(ratings) / len(ratings), 2)
+    st.metric("⭐ Average Rating", avg_rating)
+else:
+    st.metric("⭐ Average Rating", "No ratings yet")
 # ---------- Ensure farmer exists ----------
 if "current_farmer" not in st.session_state:
     st.warning("Create Farmer Profile first (Phase 1)")
