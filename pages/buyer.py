@@ -53,7 +53,7 @@ def assign_farmer(region):
     return None
 
 # -------- Place Order --------
-if st.button("📦 Place Order"):
+if st.button("📦 Place Order", key="place_order"):
     farmer_id = assign_farmer(buyer["region"])
 
     if not farmer_id:
@@ -82,17 +82,26 @@ if st.button("📦 Place Order"):
 st.divider()
 st.subheader("📜 Order History")
 
+status_flow = ["Order Placed", "Accepted", "In Transit", "Delivered"]
+
 for oid, o in st.session_state.orders.items():
     if o["buyer_id"] == buyer_id:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
+
         st.write(f"**Order ID:** {oid}")
         st.write(f"Product: {o['product']}")
         st.write(f"Quantity: {o['quantity']}")
         st.write(f"Total: ₹{o['total']}")
-        st.write(f"Status: {o['status']}")
+        st.write(f"Status: **{o['status']}**")
+
+        # -------- Status Progress Bar --------
+        if o["status"] in status_flow:
+            progress = status_flow.index(o["status"]) + 1
+            st.progress(progress / len(status_flow))
+            st.caption(" → ".join(status_flow))
 
         # -------- Reorder --------
-        if st.button(f"🔁 Reorder {oid}"):
+        if st.button(f"🔁 Reorder {oid}", key=f"reorder_{oid}"):
             new_id = str(uuid.uuid4())[:8]
             new_order = o.copy()
             new_order["timestamps"] = {
