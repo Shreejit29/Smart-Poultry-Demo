@@ -1,6 +1,15 @@
 import streamlit as st
 from datetime import datetime
-
+# -------- AUTO DEMO FARMER (for smooth demo) --------
+if "current_farmer" not in st.session_state:
+    demo_farmer_id = "DEMO_FARMER"
+    st.session_state.farmers[demo_farmer_id] = {
+        "name": "Demo Farmer",
+        "region": "Pune",
+        "capacity": 500,
+        "available": True
+    }
+    st.session_state.current_farmer = demo_farmer_id
 st.title("🚜 Farmer Dashboard")
 # ---------- FARMER RATING ----------
 ratings = [
