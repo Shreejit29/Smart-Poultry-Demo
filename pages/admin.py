@@ -1,40 +1,27 @@
 import streamlit as st
-import pandas as pd
 
-st.title("🛡️ Admin Control Center")
+st.title("🛡️ Admin Control – Phase 1")
 
-df = pd.DataFrame(st.session_state.orders)
+st.markdown("<div class='card'>", unsafe_allow_html=True)
 
-# ---------- KPI ----------
-c1, c2, c3 = st.columns(3)
-c1.metric("Total Orders", len(df))
-c2.metric("Total Revenue (₹)", int(df.amount.sum()) if not df.empty else 0)
-c3.metric("Platform Commission (₹)", int(df.commission.sum()) if not df.empty else 0)
+st.subheader("💰 Platform Commission Control")
 
-st.divider()
+commission = st.slider(
+    "Set Commission Rate (%)",
+    min_value=3,
+    max_value=10,
+    value=int(st.session_state.commission_rate * 100)
+)
 
-# ---------- STATUS ----------
-if not df.empty:
-    st.subheader("📊 Orders by Status")
-    st.bar_chart(df["status"].value_counts())
+st.session_state.commission_rate = commission / 100
 
-# ---------- REGION ----------
-if not df.empty:
-    st.subheader("🌍 Region-wise Revenue")
-    st.bar_chart(df.groupby("region")["amount"].sum())
+st.write(f"Current Commission Rate: **{commission}%**")
 
-# ---------- FARMER PERFORMANCE ----------
-if not df.empty:
-    st.subheader("👨‍🌾 Farmer Performance")
-    farmer_perf = df.groupby("farmer").agg({
-        "amount": "sum",
-        "quantity": "sum"
-    })
-    st.dataframe(farmer_perf)
+st.markdown("</div>", unsafe_allow_html=True)
 
 st.divider()
 
-# ---------- RESET ----------
-if st.button("🔄 Reset Demo"):
-    st.session_state.orders = []
-    st.success("Demo reset successfully")
+st.subheader("📊 System Snapshot")
+st.write("Total Buyers:", len(st.session_state.buyers))
+st.write("Total Farmers:", len(st.session_state.farmers))
+st.write("Total Orders:", len(st.session_state.orders))
