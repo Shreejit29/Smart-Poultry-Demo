@@ -15,9 +15,8 @@ if "current_buyer" not in st.session_state:
     st.session_state.current_buyer = demo_id
 # -------- Ensure buyer exists --------
 if "current_buyer" not in st.session_state:
-    st.warning("Please create Buyer Profile first (Phase 1)")
-    st.stop()
-
+    st.warning("Buyer profile not found. Redirecting…")
+    st.switch_page("pages/buyer_profile.py")
 buyer_id = st.session_state.current_buyer
 buyer = st.session_state.buyers[buyer_id]
 
