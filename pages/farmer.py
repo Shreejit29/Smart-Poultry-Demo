@@ -1,31 +1,26 @@
 import streamlit as st
-import uuid
 
-st.title("🚜 Farmer Profile")
+st.title("🚜 Farmer Dashboard")
 
-st.markdown("<div class='card'>", unsafe_allow_html=True)
+if "current_farmer" not in st.session_state:
+    st.warning("Create Farmer Profile first (Phase 1)")
+    st.stop()
 
-farmer_name = st.text_input("Farmer Name")
-region = st.selectbox("Region", ["Pune", "Mumbai", "Nashik", "Nagpur"])
-daily_capacity = st.number_input("Daily Capacity (units)", min_value=1, value=100)
-available = st.checkbox("Available Today", value=True)
+farmer_id = st.session_state.current_farmer
+farmer = st.session_state.farmers[farmer_id]
 
-if st.button("💾 Save Farmer Profile"):
-    farmer_id = str(uuid.uuid4())[:8]
+st.subheader(f"Welcome, {farmer['name']} ({farmer['region']})")
 
-    st.session_state.farmers[farmer_id] = {
-        "name": farmer_name,
-        "region": region,
-        "capacity": daily_capacity,
-        "available": available
-    }
+st.divider()
 
-    st.session_state.current_farmer = farmer_id
-    st.success("Farmer profile created")
+for oid, o in st.session_state.orders.items():
+    if o["farmer_id"] == farmer_id:
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
 
-st.markdown("</div>", unsafe_allow_html=True)
+        st.write(f"**Order ID:** {oid}")
+        st.write(f"Product: {o['product']}")
+        st.write(f"Quantity: {o['quantity']}")
+        st.write(f"Total Value: ₹{o['total']}")
+        st.write(f"Status: {o['status']}")
 
-# ---------- SHOW CURRENT FARMER ----------
-if "current_farmer" in st.session_state:
-    st.subheader("👨‍🌾 Your Profile")
-    st.json(st.session_state.farmers[st.session_state.current_farmer])
+        st.markdown("</div>", unsafe_allow_html=True)
